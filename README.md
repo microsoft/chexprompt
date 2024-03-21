@@ -34,6 +34,11 @@ print(results)
 
 <details>
     <summary>1. How can I cite CheXprompt?</summary>
+See [citation](README.md##Citation)
+</details>
+
+## Citation
+
 ```
 @article{
 zambranochaves2024training,
@@ -43,8 +48,6 @@ journal={arXiv preprint arXiv:2403.08002},
 year={2024}
 }
 ```
-</details>
-
 
 ## Contributing
 
