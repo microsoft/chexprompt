@@ -1,14 +1,49 @@
-# Project
+# CheXprompt
 
-> This repo has been populated by an initial template to help get you started. Please
-> make sure to update the content to build a great experience for community-building.
+CheXprompt is a tool for evaluating radiology reports for chest X-rays. 
 
-As the maintainer of this project, please make a few updates:
+## Usage
+### 1. Install Instructions
+CheXprompt is compatible with Python 3.9. To install CheXprompt, run the following command:
+```
+pip install chexprompt
+```
+### 2. Report Evaluation
 
-- Improving this README.MD file to provide a great experience
-- Updating SUPPORT.MD with content about this project's support experience
-- Understanding the security reporting process in SECURITY.MD
-- Remove this section from the README
+After installation, update the following constants in chexprompt/constants.py:
+
+- API_VERSION
+- API_BASE
+- API_KEY
+
+Then, you can use the following code to evaluate a radiology report:
+```
+import chexprompt
+
+evaluator = chexprompt.ReportEvaluator()
+
+reference_report = "The heart is normal in size. The mediastinum is unremarkable. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
+candidate_report = "The heart is normal in size. There is no pleural effusion or pneumothorax."
+
+results = evaluator.evaluate(reference_report, candidate_report)
+
+print(results)
+```
+
+## Frequently Asked Questions (FAQs)
+
+<details>
+    <summary>1. How can I cite CheXprompt?</summary>
+```
+@article{zambranochaves2024training,
+  title={Training Small Multimodal Models to Bridge Biomedical Competency Gap: A Case Study in Radiology Imaging},
+  author={Zambrano Chaves, Juan Manuel and Huang, Shih-Cheng and Xu, Yanbo and Xu, Hanwen and Usuyama, Naoto and Zhang, Sheng and Wang, Fei and Xie, Yujia and Khademi, Mahmoud and Yang, Ziyi and others},
+  journal={arXiv preprint arXiv:2403.08002},
+  year={2024}
+}
+```
+</details>
+
 
 ## Contributing
 
