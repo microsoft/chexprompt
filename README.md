@@ -34,7 +34,8 @@ print(results)
 
 <details>
     <summary>1. How can I cite CheXprompt?</summary>
-See [citation](README.md##Citation)
+See citation section below.
+
 </details>
 
 ## Citation
