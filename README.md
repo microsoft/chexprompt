@@ -34,12 +34,13 @@ print(results)
 
 <details>
     <summary>1. How can I cite CheXprompt?</summary>
-```bibtex
-@article{zambranochaves2024training,
-  title={Training Small Multimodal Models to Bridge Biomedical Competency Gap: A Case Study in Radiology Imaging},
-  author={Zambrano Chaves, Juan Manuel and Huang, Shih-Cheng and Xu, Yanbo and Xu, Hanwen and Usuyama, Naoto and Zhang, Sheng and Wang, Fei and Xie, Yujia and Khademi, Mahmoud and Yang, Ziyi and others},
-  journal={arXiv preprint arXiv:2403.08002},
-  year={2024}
+```
+@article{
+zambranochaves2024training,
+title={Training Small Multimodal Models to Bridge Biomedical Competency Gap: A Case Study in Radiology Imaging},
+author={Zambrano Chaves, Juan Manuel and Huang, Shih-Cheng and Xu, Yanbo and Xu, Hanwen and Usuyama, Naoto and Zhang, Sheng and Wang, Fei and Xie, Yujia and Khademi, Mahmoud and Yang, Ziyi and others},
+journal={arXiv preprint arXiv:2403.08002},
+year={2024}
 }
 ```
 </details>
