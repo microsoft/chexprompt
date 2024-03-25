@@ -5,10 +5,11 @@ CheXprompt is a tool for evaluating radiology reports for chest X-rays.
 ## Usage
 ### 1. Install Instructions
 CheXprompt is compatible with Python 3.9. To install CheXprompt, run the following commands:
-```
+```bash
 cd src
 pip install -e .
 ```
+
 ### 2. Report Evaluation
 
 After installation, update the following environment variables:
@@ -18,7 +19,7 @@ After installation, update the following environment variables:
 - `OPENAI_API_KEY`
 
 Then, you can use the following code to evaluate a radiology report:
-```
+```python
 import chexprompt
 
 evaluator = chexprompt.ReportEvaluator()
@@ -56,6 +57,11 @@ print(results)
 
 <details>
     <summary>1. How can I cite CheXprompt?</summary>
+See citation below.
+  </details>
+
+## Citation
+
 ```
 @article{zambranochaves2024training,
   title={Training Small Multimodal Models to Bridge Biomedical Competency Gap: A Case Study in Radiology Imaging},
