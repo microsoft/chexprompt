@@ -4,17 +4,18 @@ CheXprompt is a tool for evaluating radiology reports for chest X-rays.
 
 ## Usage
 ### 1. Install Instructions
-CheXprompt is compatible with Python 3.9. To install CheXprompt, run the following command:
+CheXprompt is compatible with Python 3.9. To install CheXprompt, run the following commands:
 ```
-pip install chexprompt
+cd src
+pip install -e .
 ```
 ### 2. Report Evaluation
 
-After installation, update the following constants in chexprompt/constants.py:
+After installation, update the following environment variables:
 
-- API_VERSION
-- API_BASE
-- API_KEY
+- `OPENAI_API_VERSION`
+- `OPENAI_API_BASE`
+- `OPENAI_API_KEY`
 
 Then, you can use the following code to evaluate a radiology report:
 ```
@@ -22,13 +23,34 @@ import chexprompt
 
 evaluator = chexprompt.ReportEvaluator()
 
-reference_report = "The heart is normal in size. The mediastinum is unremarkable. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
-candidate_report = "The heart is normal in size. There is no pleural effusion or pneumothorax."
+reference_report = "The heart has normal size. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
+
+candidate_report = "There is severe cardiomegaly. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
 
 results = evaluator.evaluate(reference_report, candidate_report)
 
 print(results)
 ```
+
+If you would like to evaluate a large amount of reports, we recommend enabling asynchronous mode, as follows:
+
+```
+import chexprompt
+
+evaluator = chexprompt.ReportEvaluator(use_async=True)
+
+reference_report = "The heart has normal size. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
+candidate_report = "There is severe cardiomegaly. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
+
+reference_reports = [reference_report]*10
+candidate_reports = [candidate_report]*10
+
+results=evaluator.evaluate(reference_reports, candidate_reports)
+
+print(results)
+
+```
+
 
 ## Frequently Asked Questions (FAQs)
 
