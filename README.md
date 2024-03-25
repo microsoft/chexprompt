@@ -35,7 +35,7 @@ print(results)
 
 If you would like to evaluate a large amount of reports, we recommend enabling asynchronous mode, as follows:
 
-```
+```python
 import chexprompt
 
 evaluator = chexprompt.ReportEvaluator(use_async=True)
