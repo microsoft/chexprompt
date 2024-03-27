@@ -4,7 +4,8 @@ CheXprompt is a tool for evaluating radiology reports for chest X-rays.
 
 ## Usage
 ### 1. Install Instructions
-CheXprompt is compatible with Python 3.9. To install CheXprompt, run the following commands:
+
+To install CheXprompt, run the following commands:
 
 ``bash
 cd src

@@ -9,7 +9,7 @@ setup(
         "openai==0.28.0",
         "aiolimiter==1.1.0",
     ],
-    python_requires=">=3.10",
+    python_requires=">=3.9",
     author="JMZAM",
     author_email="jmz@stanford.edu",
     description="Expert radiology report evaluation using GPT.",
