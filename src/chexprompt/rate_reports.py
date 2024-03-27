@@ -7,9 +7,16 @@ import openai
 from chexprompt.evaluator import ReportEvaluator
 from chexprompt.io import load_reports_to_rate, save_ratings
 
+openai.api_type = "azure"
+openai.api_base = os.environ["OPENAI_API_BASE"]
+openai.api_version = os.environ["OPENAI_API_VERSION"]
+openai.api_key = os.environ["OPENAI_API_KEY"]
+
 
 def parse_args() -> argparse.Namespace:
-    parser = argparse.ArgumentParser(description="Rate a batch of reports using chexprompt.")
+    parser = argparse.ArgumentParser(
+        description="Rate a batch of reports using chexprompt."
+    )
     parser.add_argument(
         "--rating_name",
         type=str,
@@ -70,6 +77,7 @@ def parse_args() -> argparse.Namespace:
 
     return args
 
+
 def main():
     args = parse_args()
 
@@ -92,17 +100,21 @@ def main():
     ids = [d["id"] for d in references_candidates_dicts]
     references = [d["reference"] for d in references_candidates_dicts]
     candidates = [d["candidate"] for d in references_candidates_dicts]
-    
+
     results = evaluator.evaluate(references, candidates)
 
-    results_as_dicts = [{"id": ids[i],
-                         "reference": references[i],
-                         "candidate": candidates[i],
-                         "rating": r} for i, r in enumerate(results)]
+    results_as_dicts = [
+        {
+            "id": ids[i],
+            "reference": references[i],
+            "candidate": candidates[i],
+            "rating": r,
+        }
+        for i, r in enumerate(results)
+    ]
 
-
-    
     save_ratings(results_as_dicts, output_path)
 
-if __name__ == '__main__':
+
+if __name__ == "__main__":
     main()
