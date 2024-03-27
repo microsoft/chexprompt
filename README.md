@@ -5,24 +5,31 @@ CheXprompt is a tool for evaluating radiology reports for chest X-rays.
 ## Usage
 ### 1. Install Instructions
 CheXprompt is compatible with Python 3.9. To install CheXprompt, run the following commands:
-```bash
+
+``bash
 cd src
 pip install -e .
 ```
 
 ### 2. Report Evaluation
 
-After installation, update the following environment variables:
+First, set up your Azure OpenAI configs by providing the necessary API details.
 
-- `OPENAI_API_VERSION`
-- `OPENAI_API_BASE`
-- `OPENAI_API_KEY`
+```python
+import openai
+
+openai.api_type = "azure"
+openai.api_base = os.environ["OPENAI_API_BASE"]
+openai.api_version = os.environ["OPENAI_API_VERSION"]
+openai.api_key = os.environ["OPENAI_API_KEY"]
+engine = "gpt-4-1106-preview"  # Azure OpenAI deployment name
+```
 
 Then, you can use the following code to evaluate a radiology report:
 ```python
 import chexprompt
 
-evaluator = chexprompt.ReportEvaluator()
+evaluator = chexprompt.ReportEvaluator(engine=engine)
 
 reference_report = "The heart has normal size. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
 
@@ -38,7 +45,7 @@ If you would like to evaluate a large amount of reports, we recommend enabling a
 ```python
 import chexprompt
 
-evaluator = chexprompt.ReportEvaluator(use_async=True)
+evaluator = chexprompt.ReportEvaluator(engine=engine, use_async=True)
 
 reference_report = "The heart has normal size. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."
 candidate_report = "There is severe cardiomegaly. The lungs are clear. There is no pleural effusion or pneumothorax. There is no focal airspace consolidation. There are no acute bony findings."

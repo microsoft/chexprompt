@@ -1,4 +1,5 @@
 import json
+import os
 import logging
 from typing import Any, Dict, List, Tuple
 
@@ -8,7 +9,6 @@ import openai
 import openai.error
 from aiohttp import ClientSession
 from tqdm.asyncio import tqdm_asyncio
-import chexprompt.constants as constants
 from chexprompt.eval_utils import format_full_prompt, extract_rating_dicts
 
 SYSTEM_INSTRUCTIONS = "Instructions: You are an expert radiologist. Judge the diagnostic accuracy of generated radiology report findings based on a reference findings section. For each error type, count how many errors exist in the candidate report. Examples are provided for you. For clinically significant and clinically insignificant errors of 6 error types, count how many of each error type there are. Refer to the reference and candidate findings as needed to keep maximum accuracy in counting each error type. Finally, provide the error counts in the list format exactly as it is given to you."
@@ -71,27 +71,22 @@ Errors: Number of clinically significant errors by type: ((A, 0), (B, 0), (C, 0)
 Number of clinically insignificant errors by type: ((A, 1), (B, 0), (C, 0), (D, 0), (E, 0), (F, 0))
 ##"""
 
-ENGINE_MAP = {
-    "gpt-4t": "gpt-4-1106-preview"
-}
 
 class ReportEvaluator:
-    def __init__(self,
-                 engine: str = "gpt-4t",
-                 temperature: float = 0.0,
-                 max_tokens: int = 128,
-                 top_p: float = 0.9,
-                 requests_per_minute: int = 30,
-                 frequency_penalty: float = 0.0,
-                 presence_penalty: float = 0.0,
-                 stop: List[str]|None = None,
-                 max_retries: int = 1,
-                 use_async: bool = False,
-                 ) -> None:
-
-        if engine not in ENGINE_MAP:
-            raise ValueError(f"Invalid engine: {engine}, currently supporting {list(ENGINE_MAP.keys())}.")
-        self.engine = ENGINE_MAP[engine]
+    def __init__(
+        self,
+        engine: str = "gpt-4-1106-preview",
+        temperature: float = 0.0,
+        max_tokens: int = 128,
+        top_p: float = 0.9,
+        requests_per_minute: int = 30,
+        frequency_penalty: float = 0.0,
+        presence_penalty: float = 0.0,
+        stop: List[str] | None = None,
+        max_retries: int = 1,
+        use_async: bool = False,
+    ) -> None:
+        self.engine = engine
         self.temperature = temperature
         self.max_tokens = max_tokens
         self.top_p = top_p
@@ -102,21 +97,8 @@ class ReportEvaluator:
         self.max_retries = max_retries
         self.use_async = use_async
 
-        self.api_key = constants.OPENAI_API_KEY
-        self.api_base = constants.OPENAI_API_BASE
-        self.api_version = constants.OPENAI_API_VERSION
-        self.api_type = constants.OPENAI_API_TYPE
-
-        openai.api_type = self.api_type
-        openai.api_key = self.api_key
-        openai.api_base = self.api_base
-        openai.api_version = self.api_version
-
-    def format_for_evaluation(self,
-                              reference: str,
-                              candidate: str
-                              ) -> Tuple[str, str]:
-        """ Format the reference and candidate for evaluation.
+    def format_for_evaluation(self, reference: str, candidate: str) -> Tuple[str, str]:
+        """Format the reference and candidate for evaluation.
 
         Args:
         - reference: str, the reference, or ground truth report
@@ -131,17 +113,17 @@ class ReportEvaluator:
         user_prompt = USER_INSTRUCTIONS.format(
             examples_formatted=EXAMPLES_FORMATTED,
             eval_reference=reference,
-            eval_candidate=candidate
+            eval_candidate=candidate,
         )
 
         return system_prompt, user_prompt
 
-
-    def evaluate(self,
-                references: List[str]|str,
-                candidates: List[str]|str,
-                ) -> List[Dict[str, Dict[str, int]]]:
-        """ Evaluate the candidates against the references.
+    def evaluate(
+        self,
+        references: List[str] | str,
+        candidates: List[str] | str,
+    ) -> List[Dict[str, Dict[str, int]]]:
+        """Evaluate the candidates against the references.
 
         Args:
         - references: List[str], the reference, or ground truth reports
@@ -159,7 +141,9 @@ class ReportEvaluator:
         formatted_prompts = []
         results = []
         for reference, candidate in zip(references, candidates):
-            system_prompt, user_prompt = self.format_for_evaluation(reference, candidate)
+            system_prompt, user_prompt = self.format_for_evaluation(
+                reference, candidate
+            )
             formatted_prompts.append(format_full_prompt(system_prompt, user_prompt))
 
         if not self.use_async:
@@ -176,37 +160,52 @@ class ReportEvaluator:
                     "clinically_significant": significant,
                     "clinically_insignificant": insignificant,
                 }
-                
                 for significant, insignificant in [
                     extract_rating_dicts(response) for response in responses
                 ]
             ]
 
             num_retries = 0
-            n_to_retry = sum([1 if cd["clinically_significant"] is None or cd["clinically_insignificant"] is None else 0 for cd in completion_dicts])
+            n_to_retry = sum(
+                [
+                    (
+                        1
+                        if cd["clinically_significant"] is None
+                        or cd["clinically_insignificant"] is None
+                        else 0
+                    )
+                    for cd in completion_dicts
+                ]
+            )
             if self.max_retries > 0 and n_to_retry > 0:
                 while num_retries < self.max_retries:
                     logging.warning(f"Found {n_to_retry} invalid ratings. Retrying...")
                     for fp, cd in zip(formatted_prompts, completion_dicts):
-                        if cd["clinically_significant"] is None or cd["clinically_insignificant"] is None:
+                        if (
+                            cd["clinically_significant"] is None
+                            or cd["clinically_insignificant"] is None
+                        ):
                             response = self.generate_openai_chat_completion(fp)
                             significant, insignificant = extract_rating_dicts(response)
                             cd["clinically_significant"] = significant
                             cd["clinically_insignificant"] = insignificant
                     num_retries += 1
-                    if all(cd["clinically_significant"] is not None and cd["clinically_insignificant"] is not None for cd in completion_dicts):
+                    if all(
+                        cd["clinically_significant"] is not None
+                        and cd["clinically_insignificant"] is not None
+                        for cd in completion_dicts
+                    ):
                         break
-            
+
             results = completion_dicts
-                
-            
+
         return results
 
-
-    def _evaluate_one(self,
-                      formatted_prompt: str,
-                      ) -> Dict[str, Dict[str, int]]:
-        """ Evaluate the candidate against the reference.
+    def _evaluate_one(
+        self,
+        formatted_prompt: str,
+    ) -> Dict[str, Dict[str, int]]:
+        """Evaluate the candidate against the reference.
 
         Args:
         - formatted_prompt: str, the prompt for evaluation
@@ -216,11 +215,11 @@ class ReportEvaluator:
         """
 
         response = self.generate_openai_chat_completion(formatted_prompt)
-        
+
         significant, insignificant = extract_rating_dicts(response)
-        
+
         num_retries = 0
-        
+
         if significant is None or insignificant is None and self.max_retries > 0:
             while num_retries < self.max_retries:
                 response = self.generate_openai_chat_completion(full_prompt)
@@ -231,15 +230,14 @@ class ReportEvaluator:
 
         completion_dict = {
             "clinically_significant": significant,
-            "clinically_insignificant": insignificant
+            "clinically_insignificant": insignificant,
         }
-        
+
         return completion_dict
 
-    
-    def generate_openai_chat_completion(self,
-                                        formatted_prompt: List[Dict[str, str]]
-                                        ) -> Dict[str, str]:
+    def generate_openai_chat_completion(
+        self, formatted_prompt: List[Dict[str, str]]
+    ) -> Dict[str, str]:
 
         return openai.ChatCompletion.create(
             engine=self.engine,
@@ -252,10 +250,11 @@ class ReportEvaluator:
             stop=self.stop,
         )
 
-    async def generate_openai_chat_completion_async(self,
-                                              formatted_prompt: List[Dict[str, str]],
-                                              **kwargs,
-                                              ) -> Dict[str, str]:
+    async def generate_openai_chat_completion_async(
+        self,
+        formatted_prompt: List[Dict[str, str]],
+        **kwargs,
+    ) -> Dict[str, str]:
 
         return await openai.ChatCompletion.acreate(
             engine=self.engine,
@@ -266,35 +265,43 @@ class ReportEvaluator:
             frequency_penalty=self.frequency_penalty,
             presence_penalty=self.presence_penalty,
             stop=self.stop,
-            **kwargs
+            **kwargs,
         )
 
-    async def _throttled_openai_chat_completion_acreate(self,
-                                                        formatted_prompt: List[Dict[str, str]],
-                                                        limiter: aiolimiter.AsyncLimiter,
-                                                        **kwargs
-                                                        ) -> Dict[str, Any]:
+    async def _throttled_openai_chat_completion_acreate(
+        self,
+        formatted_prompt: List[Dict[str, str]],
+        limiter: aiolimiter.AsyncLimiter,
+        **kwargs,
+    ) -> Dict[str, Any]:
         async with limiter:
             for trial_count in range(5):
                 try:
-                    return await self.generate_openai_chat_completion_async(formatted_prompt, **kwargs)
+                    return await self.generate_openai_chat_completion_async(
+                        formatted_prompt, **kwargs
+                    )
                 except openai.error.RateLimitError as e:
-                    sleep_time = int(str(e).split("Please retry after ")[1].split()[0]) + 30 * (1 + trial_count ** 2)
+                    sleep_time = int(
+                        str(e).split("Please retry after ")[1].split()[0]
+                    ) + 30 * (1 + trial_count**2)
                     logging.warning(
                         f"OpenAI API rate limit exceeded trial#{trial_count}. Sleeping for {sleep_time} seconds."
                     )
                     await asyncio.sleep(sleep_time)
                 except asyncio.exceptions.TimeoutError as e:
                     logging.warning(
-                        str(e) + "\n" +
-                        "OpenAI API timeout. Sleeping for 10 seconds."
+                        str(e) + "\n" + "OpenAI API timeout. Sleeping for 10 seconds."
                     )
                     await asyncio.sleep(10)
                 except openai.error.InvalidRequestError:
                     logging.warning("OpenAI API Invalid Request: Prompt was filtered")
                     return {
                         "choices": [
-                            {"message": {"content": "Invalid Request: Prompt was filtered"}}
+                            {
+                                "message": {
+                                    "content": "Invalid Request: Prompt was filtered"
+                                }
+                            }
                         ]
                     }
                 except openai.error.APIConnectionError:
@@ -304,8 +311,7 @@ class ReportEvaluator:
                     await asyncio.sleep(10)
                 except openai.error.Timeout as e:
                     logging.warning(
-                        str(e) + "\n" +
-                        "OpenAI APITimeout Error: OpenAI Timeout"
+                        str(e) + "\n" + "OpenAI APITimeout Error: OpenAI Timeout"
                     )
                     await asyncio.sleep(10)
                 except openai.error.APIError as e:
@@ -313,11 +319,9 @@ class ReportEvaluator:
                     break
             return {"choices": [{"message": {"content": ""}}]}
 
-
-    async def generate_openai_batch_chat_completion(self,
-                                                    formatted_prompts: List,
-                                                    **kwargs
-                                                    ) -> List[Dict[str, Dict[str, int] | None]]:
+    async def generate_openai_batch_chat_completion(
+        self, formatted_prompts: List, **kwargs
+    ) -> List[Dict[str, Dict[str, int] | None]]:
         """Generate from OpenAI Chat Completion API.
 
         Args:
@@ -329,14 +333,12 @@ class ReportEvaluator:
         limiter = aiolimiter.AsyncLimiter(self.requests_per_minute)
         async_responses = [
             self._throttled_openai_chat_completion_acreate(
-                formatted_prompt=p,
-                limiter=limiter,
-                **kwargs
+                formatted_prompt=p, limiter=limiter, **kwargs
             )
             for p in formatted_prompts
         ]
         responses = await tqdm_asyncio.gather(*async_responses)
-        
+
         await openai.aiosession.get().close()
 
         return responses

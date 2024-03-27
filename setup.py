@@ -1,9 +1,10 @@
 from setuptools import setup, find_packages
 
 setup(
-    name="CheXprompt",
+    name="chexprompt",
     version="0.1",
-    packages=find_packages(),
+    package_dir={"": "src"},
+    packages=find_packages("src"),
     install_requires=[
         "openai==0.28.0",
         "aiolimiter==1.1.0",
