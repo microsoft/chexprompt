@@ -4,8 +4,7 @@ CheXprompt is a tool for evaluating radiology reports for chest X-rays.
 
 ## Usage
 ### 1. Install Instructions
-
-To install CheXprompt, run the following commands:
+CheXprompt is compatible with Python 3.9. To install CheXprompt, run the following commands:
 
 ``bash
 cd src
@@ -20,10 +19,10 @@ First, set up your Azure OpenAI configs by providing the necessary API details.
 import openai
 
 openai.api_type = "azure"
-openai.api_base = os.environ["OPENAI_API_BASE"]  # e.g., "https://my-resource.openai.azure.com"
-openai.api_version = os.environ["OPENAI_API_VERSION"]  # e.g., "2023-07-01-preview"
+openai.api_base = os.environ["OPENAI_API_BASE"]
+openai.api_version = os.environ["OPENAI_API_VERSION"]
 openai.api_key = os.environ["OPENAI_API_KEY"]
-engine = "gpt-4-1106-preview"  # Azure OpenAI model deployment name
+engine = "gpt-4-1106-preview"  # Azure OpenAI deployment name
 ```
 
 Then, you can use the following code to evaluate a radiology report:
