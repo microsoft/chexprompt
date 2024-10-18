@@ -2,15 +2,14 @@
 
 CheXprompt is a novel approach for evaluating radiology reports for chest X-rays, leveraging the capabilities of GPT-4. It is designed to align closely with the professional error quantification practices of radiologists, offering a scalable and medically relevant solution for the automatic evaluation of radiology report generation models. By integrating advanced AI with radiological expertise, CheXprompt aims to enhance the consistency and reliability of radiology report evaluations.
 
-LLaVA-Rad Paper: [Training Small Multimodal Models to Bridge Biomedical Competency Gap: A Case Study in Radiology Imaging](https://arxiv.org/abs/2403.08002)
+CheXprompt was introduced in the LLaVA-Rad Paper: [Training Small Multimodal Models to Bridge Biomedical Competency Gap: A Case Study in Radiology Imaging](https://arxiv.org/abs/2403.08002)
 
 ## Usage
 ### 1. Install Instructions
 
-To install CheXprompt, run the following commands:
+To install CheXprompt, clone this repository, change into its directory and run the following command:
 
 ```bash
-cd src
 pip install -e .
 ```
 
@@ -19,6 +18,7 @@ pip install -e .
 First, set up your Azure OpenAI configs by providing the necessary API details.
 
 ```python
+import os
 import openai
 
 openai.api_type = "azure"
