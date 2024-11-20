@@ -2,7 +2,7 @@
 
 CheXprompt is a novel approach for evaluating radiology reports for chest X-rays, leveraging the capabilities of GPT-4. It is designed to align closely with the professional error quantification practices of radiologists, offering a scalable and medically relevant solution for the automatic evaluation of radiology report generation models. By integrating advanced AI with radiological expertise, CheXprompt aims to enhance the consistency and reliability of radiology report evaluations.
 
-CheXprompt was introduced in the LLaVA-Rad Paper: [Training Small Multimodal Models to Bridge Biomedical Competency Gap: A Case Study in Radiology Imaging](https://arxiv.org/abs/2403.08002)
+CheXprompt was introduced in the LLaVA-Rad Paper: [Towards A Clinically Accessible Radiology Foundation Model: Open-Access and Lightweight chest X-ray Findings Generation With Automated Evaluation](https://arxiv.org/abs/2403.08002)
 
 ## Usage
 ### 1. Install Instructions
@@ -69,6 +69,14 @@ print(results)
     <summary>1. How can I cite CheXprompt?</summary>
 See citation below.
   </details>
+
+<details>
+    <summary>2. What models has CheXprompt been tested with?</summary>
+In our manuscript we describe tests with GPT-4 (i.e. GPT-4 Version 0613) and GPT-4 Turbo (GPT-4 version 1106-Preview).
+
+See: [description of models in azure documentation](https://learn.microsoft.com/en-us/azure/ai-services/openai/concepts/models?tabs=python-secure%2Cglobal-standard%2Cstandard-chat-completions#gpt-4o-and-gpt-4-turbo)
+  </details>
+
 
 ## Citation
 
