@@ -1,5 +1,15 @@
 # CheXprompt
 
+[![Code License](https://img.shields.io/badge/Code%20License-MIT-red)](LICENSE)
+
+[![Data](https://img.shields.io/badge/PhysioNet-Data-228B22)](https://physionet.org/content/llava-rad-mimic-cxr-annotation/1.0.0/)
+[![🤗](https://img.shields.io/badge/🤗-LLaVA--Rad-FFA500)](https://huggingface.co/microsoft/llava-rad/)
+[![Eval](https://img.shields.io/badge/model%20code-LLaVA--Rad-purple)](https://github.com/microsoft/llava-rad/)
+
+[![Preprint](https://img.shields.io/badge/arXiv-Preprint-blue)](https://arxiv.org/abs/2403.08002)
+[![Peer Reviewed Paper](https://img.shields.io/badge/Peer%20Reviewed%20Paper-In%20Press-cyan)]()
+
+
 CheXprompt is a novel approach for evaluating radiology reports for chest X-rays, leveraging the capabilities of GPT-4. It is designed to align closely with the professional error quantification practices of radiologists, offering a scalable and medically relevant solution for the automatic evaluation of radiology report generation models. By integrating advanced AI with radiological expertise, CheXprompt aims to enhance the consistency and reliability of radiology report evaluations.
 
 CheXprompt was introduced in the LLaVA-Rad Paper: [Towards A Clinically Accessible Radiology Foundation Model: Open-Access and Lightweight chest X-ray Findings Generation With Automated Evaluation](https://arxiv.org/abs/2403.08002)
