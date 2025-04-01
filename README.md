@@ -7,12 +7,13 @@
 [![Eval](https://img.shields.io/badge/model%20code-LLaVA--Rad-purple)](https://github.com/microsoft/llava-rad/)
 
 [![Preprint](https://img.shields.io/badge/arXiv-Preprint-blue)](https://arxiv.org/abs/2403.08002)
-[![Peer Reviewed Paper](https://img.shields.io/badge/Peer%20Reviewed%20Paper-In%20Press-cyan)]()
+[![Peer Reviewed Paper](https://img.shields.io/badge/Peer%20Reviewed%20Paper-Nature%20Communications-cyan)](https://doi.org/10.1038/s41467-025-58344-x)
+
 
 
 CheXprompt is a novel approach for evaluating radiology reports for chest X-rays, leveraging the capabilities of GPT-4. It is designed to align closely with the professional error quantification practices of radiologists, offering a scalable and medically relevant solution for the automatic evaluation of radiology report generation models. By integrating advanced AI with radiological expertise, CheXprompt aims to enhance the consistency and reliability of radiology report evaluations.
 
-CheXprompt was introduced in the LLaVA-Rad Paper: [Towards A Clinically Accessible Radiology Foundation Model: Open-Access and Lightweight chest X-ray Findings Generation With Automated Evaluation](https://arxiv.org/abs/2403.08002)
+CheXprompt was introduced in [A clinically accessible small multimodal radiology model and evaluation metric for chest X-ray findings](https://doi.org/10.1038/s41467-025-58344-x)
 
 ## Usage
 ### 1. Install Instructions
@@ -91,11 +92,19 @@ See: [description of models in azure documentation](https://learn.microsoft.com/
 ## Citation
 
 ```
-@article{zambranochaves2024clinically,
-  title={Towards a clinically accessible radiology foundation model: open-access and lightweight, with automated evaluation},
-  author={Zambrano Chaves, Juan Manuel and Huang, Shih-Cheng and Xu, Yanbo and Xu, Hanwen and Usuyama, Naoto and Zhang, Sheng and Wang, Fei and Xie, Yujia and Khademi, Mahmoud and Yang, Ziyi and Awadalla, Hany and Gong, Julia and Hu, Houdong and Yang, Jianwei and Li, Chunyuan and Gao, Jianfeng and Gu, Yu and Wong, Cliff and Wei, Mu and Naumann, Tristan and Chen, Muhao and Lungren, Matthew P. and Yeung-Levy, Serena and Langlotz, Curtis P. and Wang, Sheng and Poon, Hoifung},
-  journal={arXiv preprint arXiv:2403.08002},
-  year={2024}
+@article{ZambranoChaves2025,
+author={Zambrano Chaves, Juan Manuel and Huang, Shih-Cheng and Xu, Yanbo and Xu, Hanwen and Usuyama, Naoto and Zhang, Sheng and Wang, Fei and Xie, Yujia and Khademi, Mahmoud and Yang, Ziyi and Awadalla, Hany and Gong, Julia and Hu, Houdong and Yang, Jianwei and Li, Chunyuan and Gao, Jianfeng and Gu, Yu and Wong, Cliff and Wei, Mu and Naumann, Tristan and Chen, Muhao and Lungren, Matthew P. and Chaudhari, Akshay and Yeung-Levy, Serena and Langlotz, Curtis P. and Wang, Sheng and Poon, Hoifung},
+title={A clinically accessible small multimodal radiology model and evaluation metric for chest X-ray findings},
+journal={Nature Communications},
+year={2025},
+month={Apr},
+day={01},
+volume={16},
+number={1},
+pages={3108},
+issn={2041-1723},
+doi={10.1038/s41467-025-58344-x},
+url={https://doi.org/10.1038/s41467-025-58344-x}
 }
 ```
 </details>
